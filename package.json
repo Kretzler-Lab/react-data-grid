@@ -116,5 +116,6 @@
   "bugs": {
     "url": "https://github.com/adazzle/react-data-grid/issues"
   },
-  "homepage": "https://github.com/adazzle/react-data-grid"
+  "homepage": "https://github.com/adazzle/react-data-grid",
+  "version": "3.0.7"
 }
