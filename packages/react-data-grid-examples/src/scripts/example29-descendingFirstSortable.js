@@ -1,4 +1,4 @@
-const ReactDataGrid = require('react-data-grid');
+import ReactDataGrid from 'react-data-grid';
 const exampleWrapper = require('../components/exampleWrapper');
 const React = require('react');
 
@@ -46,7 +46,7 @@ class Example extends React.Component {
         name: 'Expected Complete',
         width: 200,
         sortable: true,
-        descendingFirst: true
+        sortDescendingFirst: true
       }
     ];
 
@@ -109,7 +109,7 @@ const exampleDescription = (<p>While ReactDataGrid does not provide the ability 
 
 module.exports = exampleWrapper({
   WrappedComponent: Example,
-  exampleName: 'Descending First Sortable Columns Example',
+  exampleName: 'Sort Descending First Sortable Columns Example',
   exampleDescription,
   examplePath: './scripts/example29-descendingFirstSortable.js',
   examplePlaygroundLink: 'https://jsfiddle.net/k7tfnw1n/8/'
