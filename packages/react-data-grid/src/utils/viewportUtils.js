@@ -25,7 +25,7 @@ function getGridState(props) {
   };
 }
 
-function getRenderedColumnCount(props, getDOMNodeOffsetWidth, displayStart, width) {
+function getRenderedColumnCount(props, getDOMNodeOffsetWidth, displayStart, width, scrollLeft) {
   let remainingWidth = width && width > 0 ? width : props.columnMetrics.totalWidth;
   if (remainingWidth === 0) {
     remainingWidth = getDOMNodeOffsetWidth();
@@ -41,7 +41,14 @@ function getRenderedColumnCount(props, getDOMNodeOffsetWidth, displayStart, widt
 
     columnCount++;
     columnIndex++;
-    remainingWidth -= column.width;
+    if (columnCount === 1 && scrollLeft > column.left) {
+      // the first column might be partially hidden, and cause right columns not to be displayed.
+      let hiddenPartOfColumn = scrollLeft - column.left;
+      remainingWidth -= column.width - hiddenPartOfColumn;
+    }
+    else {
+      remainingWidth -= column.width;
+    }
   }
   return columnCount;
 }
@@ -65,7 +72,7 @@ function getNextScrollState(props, getDOMNodeOffsetWidth, scrollTop, scrollLeft,
   const displayEnd = min(visibleEnd + props.overScan.rowsEnd, length);
   const totalNumberColumns = ColumnUtils.getSize(props.columnMetrics.columns);
   const colVisibleStart = (totalNumberColumns > 0) ? max(0, getVisibleColStart(props, scrollLeft)) : 0;
-  const renderedColumnCount = getRenderedColumnCount(props, getDOMNodeOffsetWidth, colVisibleStart, width);
+  const renderedColumnCount = getRenderedColumnCount(props, getDOMNodeOffsetWidth, colVisibleStart, width, scrollLeft);
   const colVisibleEnd = (renderedColumnCount !== 0) ? colVisibleStart + renderedColumnCount : totalNumberColumns;
   const colDisplayStart = max(0, colVisibleStart - props.overScan.colsStart);
   const colDisplayEnd = min(colVisibleEnd + props.overScan.colsEnd, totalNumberColumns);
