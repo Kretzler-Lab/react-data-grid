@@ -13,35 +13,25 @@ class SortableHeaderCell extends React.Component {
     column: PropTypes.shape({ name: PropTypes.node }),
     onSort: PropTypes.func.isRequired,
     sortDirection: PropTypes.oneOf(Object.keys(DEFINE_SORT)),
-    descendingFirst: PropTypes.bool
+    headerRenderer: PropTypes.node,
+    sortDescendingFirst: PropTypes.bool
   };
 
   onClick = () => {
     let direction;
-    switch (this.props.sortDirection) {
+    const { sortDirection, sortDescendingFirst } = this.props;
+    switch (sortDirection) {
     default:
     case null:
     case undefined:
     case DEFINE_SORT.NONE:
-      if (this.props.descendingFirst) {
-        direction = DEFINE_SORT.DESC;
-      } else {
-        direction = DEFINE_SORT.ASC;
-      }
+      direction = sortDescendingFirst ? DEFINE_SORT.DESC : DEFINE_SORT.ASC;
       break;
     case DEFINE_SORT.ASC:
-      if (this.props.descendingFirst) {
-        direction = DEFINE_SORT.NONE;
-      } else {
-        direction = DEFINE_SORT.DESC;
-      }
+      direction = sortDescendingFirst ? DEFINE_SORT.NONE : DEFINE_SORT.DESC;
       break;
     case DEFINE_SORT.DESC:
-      if (this.props.descendingFirst) {
-        direction = DEFINE_SORT.ASC;
-      } else {
-        direction = DEFINE_SORT.NONE;
-      }
+      direction = sortDescendingFirst ? DEFINE_SORT.ASC : DEFINE_SORT.NONE;
       break;
     }
     this.props.onSort(
@@ -63,13 +53,13 @@ class SortableHeaderCell extends React.Component {
       'react-grid-HeaderCell-sortable--ascending': this.props.sortDirection === 'ASC',
       'react-grid-HeaderCell-sortable--descending': this.props.sortDirection === 'DESC'
     });
-
+    const content = this.props.headerRenderer ? this.props.headerRenderer :  this.props.column.name;
     return (
       <div className={className}
         onClick={this.onClick}
         style={{cursor: 'pointer'}}>
         <span className="pull-right">{this.getSortByText()}</span>
-        {this.props.column.name}
+        {content}
       </div>
     );
   }
